@@ -67,7 +67,4 @@ public class SelectionController extends BaseController {
         return new JsonResult<>(OK);
     }
 }
-// refactor above
-
-
 
