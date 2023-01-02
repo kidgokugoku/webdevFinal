@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- 驱动包绝对路径 -->
+    <classPathEntry
+            location="D:\projects\maven\maven-repo\mysql\mysql-connector-java\8.0.30\mysql-connector-java-8.0.30.jar"/>
+
+    <context id="default" targetRuntime="MyBatis3Simple">
+
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <!-- 不输出注释 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/webdev"
+                        userId="root"
+                        password="">
+        </jdbcConnection>
+
+
+        <!-- 不强制把所有的数字类型转化为BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.CourseManagement.Entity" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.CourseManagement.mapper"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="student_course"
+               enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="true"
+               enableUpdateByExample="true"
+               domainObjectName="StudentCourse"
+               mapperName="StudentCourseMapper">
+            <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+
+        <!--        <table tableName="users"-->
+        <!--               enableCountByExample="false"-->
+        <!--               enableDeleteByExample="false"-->
+        <!--               enableSelectByExample="false"-->
+        <!--               enableUpdateByExample="false"-->
+        <!--               domainObjectName="User"-->
+        <!--               mapperName="UserMapper">-->
+        <!--            <generatedKey column="uid" sqlStatement="MySql"/>-->
+        <!--        </table>-->
+
+        <!--        <table tableName="courses"-->
+        <!--               enableCountByExample="false"-->
+        <!--               enableDeleteByExample="false"-->
+        <!--               enableSelectByExample="false"-->
+        <!--               enableUpdateByExample="false"-->
+        <!--               domainObjectName="Course"-->
+        <!--               mapperName="CourseMapper">-->
+        <!--            <generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--        </table>-->
+
+        <!--        <table tableName="teacher_course"-->
+        <!--               enableCountByExample="false"-->
+        <!--               enableDeleteByExample="false"-->
+        <!--               enableSelectByExample="true"-->
+        <!--               enableUpdateByExample="true"-->
+        <!--               domainObjectName="TeacherCourse"-->
+        <!--               mapperName="TeacherCourseMapper">-->
+        <!--            <generatedKey column="id" sqlStatement="MySql"/>-->
+        <!--        </table>-->
+    </context>
+</generatorConfiguration>

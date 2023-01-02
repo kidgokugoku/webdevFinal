@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.CourseManagement.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.CourseManagement.Entity.User">
+        <id column="uid" jdbcType="INTEGER" property="uid"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="password" jdbcType="CHAR" property="password"/>
+        <result column="user_type" jdbcType="INTEGER" property="userType"/>
+        <result column="is_deleted" jdbcType="INTEGER" property="isDeleted"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="created_user" jdbcType="VARCHAR" property="createdUser"/>
+        <result column="modified_user" jdbcType="VARCHAR" property="modifiedUser"/>
+    </resultMap>
+    <update id="deleteByPrimaryKey" parameterType="com.CourseManagement.Entity.User">
+        update users set
+        is_deleted = 1,
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        modified_user = #{modifiedUser,jdbcType=VARCHAR}
+        where uid = #{uid,jdbcType=INTEGER}
+    </update>
+    <insert id="insert" parameterType="com.CourseManagement.Entity.User">
+        <selectKey keyProperty="uid" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into users (uid, username, name,
+        password, user_type, is_deleted,
+        created_time, modified_time, created_user,
+        modified_user)
+        values (#{uid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+        #{password,jdbcType=CHAR}, #{userType,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER},
+        #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR},
+        #{modifiedUser,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.CourseManagement.Entity.User">
+        update users
+        set username = #{username,jdbcType=VARCHAR},
+        name = #{name,jdbcType=VARCHAR},
+        password = #{password,jdbcType=CHAR},
+        user_type = #{userType,jdbcType=INTEGER},
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        modified_user = #{modifiedUser,jdbcType=VARCHAR}
+        where uid = #{uid,jdbcType=INTEGER}
+    </update>
+
+    <update id="updatePasswordByPrimaryKey" parameterType="com.CourseManagement.Entity.User">
+        update users
+        set
+        password = #{password,jdbcType=CHAR},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        modified_user = #{modifiedUser,jdbcType=VARCHAR}
+        where uid = #{uid,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select uid, username, name, password, user_type, is_deleted, created_time, modified_time,
+        created_user, modified_user
+        from users
+        where uid = #{uid,jdbcType=INTEGER}
+    </select>
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select uid, username, name, password, user_type, is_deleted, created_time, modified_time,
+        created_user, modified_user
+        from users
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select uid, username, name, password, user_type, is_deleted, created_time, modified_time,
+        created_user, modified_user
+        from users
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select uid, username, name, password, user_type, is_deleted, created_time, modified_time,
+        created_user, modified_user
+        from users
+        where is_deleted = 0
+    </select>
+
+
+    <!--    <insert id="insert" keyProperty="uid" useGeneratedKeys="true">-->
+    <!--        INSERT INTO users(-->
+    <!--        name,-->
+    <!--        username,-->
+    <!--        password,-->
+    <!--        is_deleted,-->
+    <!--        user_type,-->
+    <!--        created_time,-->
+    <!--        modified_time,-->
+    <!--        created_user,-->
+    <!--        modified_user-->
+    <!--        ) VALUES (-->
+    <!--        #{name},-->
+    <!--        #{username},-->
+    <!--        #{password},-->
+    <!--        #{isDeleted},-->
+    <!--        #{userType},-->
+    <!--        #{createdTime},-->
+    <!--        #{modifiedTime},-->
+    <!--        #{createdUser},-->
+    <!--        #{modifiedUser}-->
+    <!--        )-->
+    <!--    </insert>-->
+
+
+    <!--    <select id="findAll" resultMap="UserEntityMap">-->
+    <!--        SELECT * FROM users WHERE is_deleted = 0-->
+    <!--    </select>-->
+
+    <!--    <select id="findAllStudents" resultMap="UserEntityMap">-->
+    <!--        SELECT * FROM users WHERE is_deleted = 0 AND user_type = 1-->
+    <!--    </select>-->
+
+    <!--    <select id="findAllTeachers" resultMap="UserEntityMap">-->
+    <!--        SELECT * FROM users WHERE is_deleted = 0 AND user_type = 2-->
+    <!--    </select>-->
+
+    <!--    <select id="findByName" resultMap="UserEntityMap">-->
+    <!--        SELECT * FROM users WHERE name = #{name}-->
+    <!--    </select>-->
+
+    <!--    <select id="findByUsername" resultMap="UserEntityMap">-->
+    <!--        SELECT * FROM users WHERE username = #{username}-->
+    <!--    </select>-->
+
+    <!--    <update id="updatePasswordByUid">-->
+    <!--        UPDATE users SET-->
+    <!--        `password` = #{password},-->
+    <!--        modified_user = #{modifiedUser},-->
+    <!--        modified_time = #{modifiedTime}-->
+    <!--        WHERE uid = #{uid}-->
+    <!--    </update>-->
+
+    <!--    <update id="updateUserByUid">-->
+    <!--        UPDATE users SET-->
+    <!--        name = #{name},-->
+    <!--        username = #{username},-->
+    <!--        `password` = #{password},-->
+    <!--        user_type = #{userType},-->
+    <!--        is_deleted = #{isDeleted},-->
+    <!--        modified_user = #{modifiedUser},-->
+    <!--        modified_time = #{modifiedTime}-->
+    <!--        WHERE uid = #{uid}-->
+    <!--    </update>-->
+
+</mapper>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.CourseManagement.mapper.CourseMapper">
+    <resultMap id="BaseResultMap" type="com.CourseManagement.Entity.Course">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="credit" jdbcType="INTEGER" property="credit"/>
+        <result column="duration" jdbcType="INTEGER" property="duration"/>
+        <result column="capacity" jdbcType="INTEGER" property="capacity"/>
+        <result column="current_selected" jdbcType="INTEGER" property="currentSelected"/>
+        <result column="course_type" jdbcType="INTEGER" property="courseType"/>
+        <result column="campus" jdbcType="INTEGER" property="campus"/>
+        <result column="is_deleted" jdbcType="INTEGER" property="isDeleted"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="created_user" jdbcType="VARCHAR" property="createdUser"/>
+        <result column="modified_user" jdbcType="VARCHAR" property="modifiedUser"/>
+        <result column="teacherName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="com.CourseManagement.Entity.Course">
+        UPDATE courses
+        SET is_deleted = 1,
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        modified_user = #{modifiedUser,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.CourseManagement.Entity.Course">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into courses (id, name, credit,
+        duration, capacity, current_selected,
+        course_type, campus, is_deleted,
+        created_time, modified_time, created_user,
+        modified_user)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{credit,jdbcType=INTEGER},
+        #{duration,jdbcType=INTEGER}, #{capacity,jdbcType=INTEGER}, #{currentSelected,jdbcType=INTEGER},
+        #{courseType,jdbcType=INTEGER}, #{campus,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER},
+        #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR},
+        #{modifiedUser,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.CourseManagement.Entity.Course">
+        update courses
+        set name = #{name,jdbcType=VARCHAR},
+        credit = #{credit,jdbcType=INTEGER},
+        duration = #{duration,jdbcType=INTEGER},
+        capacity = #{capacity,jdbcType=INTEGER},
+        current_selected = #{currentSelected,jdbcType=INTEGER},
+        course_type = #{courseType,jdbcType=INTEGER},
+        campus = #{campus,jdbcType=INTEGER},
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        created_user = #{createdUser,jdbcType=VARCHAR},
+        modified_user = #{modifiedUser,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateScoreByPrimaryKey" parameterType="java.lang.Integer">
+        update courses
+        set name = #{name,jdbcType=VARCHAR},
+        credit = #{credit,jdbcType=INTEGER},
+        duration = #{duration,jdbcType=INTEGER},
+        capacity = #{capacity,jdbcType=INTEGER},
+        current_selected = #{currentSelected,jdbcType=INTEGER},
+        course_type = #{courseType,jdbcType=INTEGER},
+        campus = #{campus,jdbcType=INTEGER},
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        created_user = #{createdUser,jdbcType=VARCHAR},
+        modified_user = #{modifiedUser,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select id, name, credit, duration, capacity, current_selected, course_type, campus,
+        is_deleted, created_time, modified_time, created_user, modified_user
+        from courses
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, name, credit, duration, capacity, current_selected, course_type, campus,
+        is_deleted, created_time, modified_time, created_user, modified_user
+        from courses
+        where is_deleted = 0
+    </select>
+
+    <select id="selectAllCommon" resultMap="BaseResultMap">
+        select id, name, credit, duration, capacity, current_selected, course_type, campus
+        from courses
+        where is_deleted = 0
+    </select>
+
+    <select id="selectAllWithTeacherName" resultType="map">
+        select c.id,
+        c.name,
+        credit as credit,
+        duration,
+        capacity,
+        current_selected as currentSelected,
+        course_type as courseType,
+        campus,
+        u.name as teacherName
+        from courses c
+        left join teacher_course t on c.id = t.course_id
+        left join users u on t.teacher_id = u.uid
+        where c.is_deleted = 0
+        ;
+    </select>
+
+    <select id="selectAllWithStudentName" resultType="map">
+        select c.id,c.name,
+        credit as credit,
+        duration,
+        capacity, current_selected as currentSelected,
+        course_type as courseType,
+        campus,
+        us.name as studentName,
+        ut.name as teacherName
+        from courses c
+        left join teacher_course t on c.id = t.course_id
+        left join student_course s on c.id = s.course_id
+        left join users us on s.student_id = us.uid
+        left join users ut on t.teacher_id = ut.uid
+        where c.is_deleted = 0
+        ;
+    </select>
+
+
+</mapper>
