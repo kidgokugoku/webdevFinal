@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.CourseManagement.mapper.StudentCourseMapper">
+    <resultMap id="BaseResultMap" type="com.CourseManagement.Entity.StudentCourse">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+        <result column="student_id" jdbcType="INTEGER" property="studentId"/>
+        <result column="score" jdbcType="REAL" property="score"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="created_user" jdbcType="VARCHAR" property="createdUser"/>
+        <result column="modified_user" jdbcType="VARCHAR" property="modifiedUser"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from student_course
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.CourseManagement.Entity.StudentCourse">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into student_course (id, course_id, student_id,
+        score, created_time, modified_time,
+        created_user, modified_user)
+        values (#{id,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER},
+        #{score,jdbcType=REAL}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP},
+        #{createdUser,jdbcType=VARCHAR}, #{modifiedUser,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.CourseManagement.Entity.StudentCourse">
+        update student_course
+        set course_id     = #{courseId,jdbcType=INTEGER},
+            student_id    = #{studentId,jdbcType=INTEGER},
+            score         = #{score,jdbcType=REAL},
+            created_time  = #{createdTime,jdbcType=TIMESTAMP},
+            modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            created_user  = #{createdUser,jdbcType=VARCHAR},
+            modified_user = #{modifiedUser,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select id,
+               course_id,
+               student_id,
+               score,
+               created_time,
+               modified_time,
+               created_user,
+               modified_user
+        from student_course
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               course_id,
+               student_id,
+               score,
+               created_time,
+               modified_time,
+               created_user,
+               modified_user
+        from student_course
+    </select>
+    <delete id="delete" parameterType="com.CourseManagement.Entity.StudentCourse">
+        delete
+        from student_course
+        where student_id = #{studentId,jdbcType=INTEGER}
+          and course_id = #{courseId,jdbcType=INTEGER}
+    </delete>
+    <select id="selectByIds" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select id,
+               student_id,
+               course_id,
+               score,
+               created_time,
+               modified_time,
+               created_user,
+               modified_user
+        from student_course
+        where student_id = #{studentId,jdbcType=INTEGER}
+          and course_id = #{courseId,jdbcType=INTEGER}
+    </select>
+    <select id="selectByStudentId" parameterType="java.lang.Integer" resultType="map">
+        select student_id,
+               course_id,
+               score,
+               c.name,
+               c.credit           as credit,
+               c.duration,
+               c.capacity,
+               c.campus,
+               c.course_type      as courseType,
+               c.current_selected as currentSelected
+        from student_course
+                 left join courses c
+                           on c.id = course_id
+        where student_course.student_id = #{studentId,jdbcType=INTEGER}
+
+    </select>
+    <select id="selectByCourseId" parameterType="java.lang.Integer" resultType="map">
+        select student_id as studentId,
+               course_id  as courseId,
+               s.name
+        from student_course
+                 left join users s
+                           on s.uid = student_id
+        where student_course.course_id = #{courseId,jdbcType=INTEGER}
+    </select>
+
+</mapper>
